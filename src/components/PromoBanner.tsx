@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 
 export function PromoBanner() {
-    const promoText = "TU PÁGINA WEB PROFESIONAL DESDE $200.000 • PRESUPUESTO SIN COMPROMISO";
+    const promoText = "TU PÁGINA WEB PROFESIONAL DESDE $100.000 • PRESUPUESTO SIN COMPROMISO";
 
     return (
         <div className="fixed top-0 left-0 w-full h-10 bg-chunix text-black z-[60] overflow-hidden flex items-center shadow-lg">
