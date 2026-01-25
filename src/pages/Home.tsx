@@ -345,29 +345,31 @@ export function Home() {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.5 }}
-                                    className="relative aspect-[4/3] sm:aspect-[16/9] md:aspect-[21/9]"
+                                    className="flex flex-col md:block" // CAMBIO CLAVE: Flex column en mobile, Block en desktop
                                 >
                                     {/* Imagen Real del Proyecto */}
-                                    <img
-                                        src={projects[currentProject].image}
-                                        alt={projects[currentProject].name}
-                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    />
-
-                                    {/* Overlay gradiente para asegurar legibilidad del texto */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/60 to-transparent"></div>
+                                    <div className="relative aspect-[4/3] md:aspect-[21/9] w-full overflow-hidden">
+                                        <img
+                                            src={projects[currentProject].image}
+                                            alt={projects[currentProject].name}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        {/* Overlay solo visible en Desktop para el texto sobre imagen */}
+                                        <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/60 to-transparent"></div>
+                                    </div>
 
                                     {/* Contenido del proyecto */}
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10 z-20">
+                                    {/* En mobile: bloque relativo con fondo. En desktop: absoluto sobre la imagen */}
+                                    <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 p-6 sm:p-8 md:p-10 z-20 bg-dark-surface md:bg-transparent">
                                         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                                             <div className="max-w-3xl">
-                                                <span className="inline-block px-3 py-1 bg-chunix/90 text-black text-xs font-bold rounded-full mb-3 shadow-[0_0_15px_rgba(37,211,102,0.4)]">
+                                                <span className="inline-block px-3 py-1 bg-chunix/10 md:bg-chunix/90 text-chunix md:text-black text-xs font-bold rounded-full mb-3 md:shadow-[0_0_15px_rgba(37,211,102,0.4)] border border-chunix/20 md:border-none">
                                                     {projects[currentProject].category}
                                                 </span>
-                                                <h3 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">
+                                                <h3 className="text-xl sm:text-2xl md:text-5xl font-bold text-white mb-3 md:drop-shadow-lg">
                                                     {projects[currentProject].name}
                                                 </h3>
-                                                <p className="text-white/90 text-sm sm:text-base md:text-lg font-medium leading-relaxed drop-shadow-md">
+                                                <p className="text-gray-400 md:text-white/90 text-sm sm:text-base md:text-lg font-medium leading-relaxed md:drop-shadow-md">
                                                     {projects[currentProject].description}
                                                 </p>
                                             </div>
@@ -375,7 +377,7 @@ export function Home() {
                                                 href={projects[currentProject].link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center justify-center gap-2 bg-white text-black px-6 py-3 rounded-full font-bold text-sm sm:text-base hover:bg-chunix transition-all shadow-xl hover:scale-105 shrink-0"
+                                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-chunix md:bg-white text-black px-6 py-4 md:py-3 rounded-xl md:rounded-full font-bold text-base hover:bg-chunix-light transition-all shadow-lg hover:scale-105 shrink-0"
                                             >
                                                 Ver proyecto real
                                                 <ExternalLink className="w-4 h-4" />
@@ -385,21 +387,24 @@ export function Home() {
                                 </motion.div>
                             </AnimatePresence>
 
-                            {/* Controles de navegación */}
-                            <button
-                                onClick={prevProject}
-                                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all z-10 backdrop-blur-sm"
-                                aria-label="Proyecto anterior"
-                            >
-                                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-                            </button>
-                            <button
-                                onClick={nextProject}
-                                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all z-10 backdrop-blur-sm"
-                                aria-label="Proyecto siguiente"
-                            >
-                                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-                            </button>
+                            {/* Controles de navegación - Ajustados para no tapar en mobile */}
+                            {/* En mobile los pongo sobre la imagen, centrados verticalmente respecto a la IMAGEN, no a toda la tarjeta */}
+                            <div className="absolute top-[35%] md:top-1/2 -translate-y-1/2 w-full flex justify-between px-2 md:px-4 z-30 pointer-events-none">
+                                <button
+                                    onClick={prevProject}
+                                    className="w-10 h-10 md:w-12 md:h-12 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all backdrop-blur-sm pointer-events-auto"
+                                    aria-label="Proyecto anterior"
+                                >
+                                    <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+                                </button>
+                                <button
+                                    onClick={nextProject}
+                                    className="w-10 h-10 md:w-12 md:h-12 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all backdrop-blur-sm pointer-events-auto"
+                                    aria-label="Proyecto siguiente"
+                                >
+                                    <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Indicadores de progreso */}
